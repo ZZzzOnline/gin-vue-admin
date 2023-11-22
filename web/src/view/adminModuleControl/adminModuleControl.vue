@@ -78,7 +78,7 @@
         <el-table-column align="left" label="禁止登录" prop="forbiddenLogin" width="120">
             <template #default="scope">{{ formatBoolean(scope.row.forbiddenLogin) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="禁止游戏内英雄导出" prop="forbiddenInGameHeroExport" width="120">
+        <el-table-column align="left" label="禁止游戏内英雄导出" prop="forbiddenInGameHeroExport" width="180">
             <template #default="scope">{{ formatBoolean(scope.row.forbiddenInGameHeroExport) }}</template>
         </el-table-column>
         <el-table-column align="left" label="操作" min-width="120">
