@@ -49,10 +49,10 @@ func (m *mongo) Initialization() error {
 		MaxPoolSize:      &global.GVA_CONFIG.Mongo.MaxPoolSize,
 		SocketTimeoutMS:  &global.GVA_CONFIG.Mongo.SocketTimeoutMs,
 		ConnectTimeoutMS: &global.GVA_CONFIG.Mongo.ConnectTimeoutMs,
-		Auth: &qmgo.Credential{
-			Username: global.GVA_CONFIG.Mongo.Username,
-			Password: global.GVA_CONFIG.Mongo.Password,
-		},
+		//Auth: &qmgo.Credential{
+		//	Username: global.GVA_CONFIG.Mongo.Username,
+		//	Password: global.GVA_CONFIG.Mongo.Password,
+		//},
 	}, opts...)
 	if err != nil {
 		return errors.Wrap(err, "链接mongodb数据库失败!")
