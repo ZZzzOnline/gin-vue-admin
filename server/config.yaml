@@ -83,7 +83,7 @@ hua-wei-obs:
     access-key: you-access-key
     secret-key: you-secret-key
 jwt:
-    signing-key: b3a743e6-7fa7-4d4d-b867-abd3a6caa16f
+    signing-key: e8f3be1f-bc1b-4799-9db5-0a910d3442f7
     expires-time: 7d
     buffer-time: 1d
     issuer: qmPlus
@@ -91,9 +91,9 @@ local:
     path: uploads/file
     store-path: uploads/file
 mongo:
-    coll: "admin_init_collection"
-    options: "maxPoolSize=20&w=majority&directConnection=true"
-    database: "dev-blocklords"
+    coll: admin_init_collection
+    options: maxPoolSize=20&w=majority&directConnection=true
+    database: dev-blocklords
     username: ""
     password: ""
     min-pool-size: 5
@@ -102,7 +102,7 @@ mongo:
     connect-timeout-ms: 30000
     is-zap: false
     hosts:
-        - host: "192.168.8.223"
+        - host: 192.168.8.223
           port: "27027"
 mssql:
     prefix: ""
@@ -122,7 +122,7 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: gva
+    db-name: blocklords-admin
     username: root
     password: Zhao17333021636..
     path: 127.0.0.1
