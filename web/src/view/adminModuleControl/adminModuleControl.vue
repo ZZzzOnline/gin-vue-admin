@@ -124,7 +124,7 @@
       <el-scrollbar height="500px">
           <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="180px">
             <el-form-item label="邮箱地址:"  prop="email" >
-              <el-input v-model="formData.email" :clearable="false"  placeholder="请输入邮箱地址" />
+              <el-input v-model="formData.email" :clearable="false"  placeholder="请输入邮箱地址" :disabled="type==='create'?false:true" />
             </el-form-item>
             <el-form-item label="账号唯一标识:"  prop="accountId" >
               <el-input v-model.number="formData.accountId" :clearable="false" placeholder="账号唯一标识" :disabled="true" />
