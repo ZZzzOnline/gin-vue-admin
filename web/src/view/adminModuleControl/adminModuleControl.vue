@@ -88,7 +88,7 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="邮箱地址" prop="email" width="120" />
+        <el-table-column align="left" label="邮箱地址" prop="email" width="260" />
         <el-table-column align="left" label="账号唯一标识" prop="accountId" width="120" />
         <el-table-column align="left" label="玩家标识" prop="playerId" width="120" />
         <el-table-column align="left" label="禁止登录" prop="forbiddenLogin" width="120">
