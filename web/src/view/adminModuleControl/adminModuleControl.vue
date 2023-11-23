@@ -15,6 +15,19 @@
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
+        <el-form-item label="邮箱地址" prop="email">
+         <el-input v-model="searchInfo.email" placeholder="搜索条件" />
+
+        </el-form-item>
+        <el-form-item label="账号唯一标识" prop="accountId">
+            
+             <el-input v-model.number="searchInfo.accountId" placeholder="搜索条件" />
+
+        </el-form-item>
+        <el-form-item label="玩家标识" prop="playerId">
+         <el-input v-model="searchInfo.playerId" placeholder="搜索条件" />
+
+        </el-form-item>
             <el-form-item label="禁止登录" prop="forbiddenLogin">
             <el-select v-model="searchInfo.forbiddenLogin" clearable placeholder="请选择">
                 <el-option
@@ -75,6 +88,9 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
+        <el-table-column align="left" label="邮箱地址" prop="email" width="120" />
+        <el-table-column align="left" label="账号唯一标识" prop="accountId" width="120" />
+        <el-table-column align="left" label="玩家标识" prop="playerId" width="120" />
         <el-table-column align="left" label="禁止登录" prop="forbiddenLogin" width="120">
             <template #default="scope">{{ formatBoolean(scope.row.forbiddenLogin) }}</template>
         </el-table-column>
@@ -106,7 +122,16 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
       <el-scrollbar height="500px">
-          <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
+          <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="180px">
+            <el-form-item label="邮箱地址:"  prop="email" >
+              <el-input v-model="formData.email" :clearable="false"  placeholder="请输入邮箱地址" />
+            </el-form-item>
+            <el-form-item label="账号唯一标识:"  prop="accountId" >
+              <el-input v-model.number="formData.accountId" :clearable="false" placeholder="请输入账号唯一标识" />
+            </el-form-item>
+            <el-form-item label="玩家标识:"  prop="playerId" >
+              <el-input v-model="formData.playerId" :clearable="false"  placeholder="请输入玩家标识" />
+            </el-form-item>
             <el-form-item label="禁止登录:"  prop="forbiddenLogin" >
               <el-switch v-model="formData.forbiddenLogin" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
             </el-form-item>
@@ -126,6 +151,15 @@
     <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
       <el-scrollbar height="550px">
         <el-descriptions column="1" border>
+                <el-descriptions-item label="邮箱地址">
+                        {{ formData.email }}
+                </el-descriptions-item>
+                <el-descriptions-item label="账号唯一标识">
+                        {{ formData.accountId }}
+                </el-descriptions-item>
+                <el-descriptions-item label="玩家标识">
+                        {{ formData.playerId }}
+                </el-descriptions-item>
                 <el-descriptions-item label="禁止登录">
                     {{ formatBoolean(formData.forbiddenLogin) }}
                 </el-descriptions-item>
@@ -159,6 +193,9 @@ defineOptions({
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
+        email: '',
+        accountId: 0,
+        playerId: '',
         forbiddenLogin: false,
         forbiddenInGameHeroExport: false,
         })
@@ -166,6 +203,17 @@ const formData = ref({
 
 // 验证规则
 const rule = reactive({
+               email : [{
+                   required: true,
+                   message: '',
+                   trigger: ['input','blur'],
+               },
+               {
+                   whitespace: true,
+                   message: '不能只输入空格',
+                   trigger: ['input', 'blur'],
+              }
+              ],
 })
 
 const searchRule = reactive({
@@ -359,6 +407,9 @@ const getDetails = async (row) => {
 const closeDetailShow = () => {
   detailShow.value = false
   formData.value = {
+          email: '',
+          accountId: 0,
+          playerId: '',
           forbiddenLogin: false,
           forbiddenInGameHeroExport: false,
           }
@@ -375,6 +426,9 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
+        email: '',
+        accountId: 0,
+        playerId: '',
         forbiddenLogin: false,
         forbiddenInGameHeroExport: false,
         }
