@@ -127,10 +127,10 @@
               <el-input v-model="formData.email" :clearable="false"  placeholder="请输入邮箱地址" />
             </el-form-item>
             <el-form-item label="账号唯一标识:"  prop="accountId" >
-              <el-input v-model.number="formData.accountId" :clearable="false" placeholder="请输入账号唯一标识" />
+              <el-input v-model.number="formData.accountId" :clearable="false" placeholder="账号唯一标识" :disabled="true" />
             </el-form-item>
             <el-form-item label="玩家标识:"  prop="playerId" >
-              <el-input v-model="formData.playerId" :clearable="false"  placeholder="请输入玩家标识" />
+              <el-input v-model="formData.playerId" :clearable="false"  placeholder="玩家标识" :disabled="true" />
             </el-form-item>
             <el-form-item label="禁止登录:"  prop="forbiddenLogin" >
               <el-switch v-model="formData.forbiddenLogin" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
