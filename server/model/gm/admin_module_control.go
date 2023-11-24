@@ -7,15 +7,15 @@ import (
 
 // 模块控制 结构体  AdminModuleControl
 type AdminModuleControl struct {
-	global.GVA_MODEL
-	Email                     string `json:"email" form:"email" gorm:"column:email;comment:邮箱地址;"`                                                                                       //邮箱地址
-	AccountId                 *int   `json:"accountId" form:"accountId" gorm:"column:account_id;comment:账号唯一标识;"`                                                                        //账号唯一标识
-	PlayerId                  string `json:"playerId" form:"playerId" gorm:"column:player_id;comment:玩家标识;"`                                                                             //玩家标识
-	ForbiddenLogin            *bool  `json:"forbiddenLogin" form:"forbiddenLogin" gorm:"column:forbidden_login;comment:玩家是否被禁止登录：禁止登录-true;未禁止登录-false/空;"`                              //禁止登录
-	ForbiddenInGameHeroExport *bool  `json:"forbiddenInGameHeroExport" form:"forbiddenInGameHeroExport" gorm:"column:forbidden_in_game_hero_export;comment:是否禁止游戏内英雄导出：禁止-true;不禁止-其它;"` //禁止游戏内英雄导出
-	CreatedBy                 uint   `gorm:"column:created_by;comment:创建者"`
-	UpdatedBy                 uint   `gorm:"column:updated_by;comment:更新者"`
-	DeletedBy                 uint   `gorm:"column:deleted_by;comment:删除者"`
+	global.GVA_MONGO_MODEL
+	Email                     string `bson:"Email" json:"email" form:"email" gorm:"column:email;comment:邮箱地址;"`                                                                                                           //邮箱地址
+	AccountId                 *int   `bson:"AccountId" json:"accountId" form:"accountId" gorm:"column:account_id;comment:账号唯一标识;"`                                                                                        //账号唯一标识
+	PlayerId                  string `bson:"PlayerId" json:"playerId" form:"playerId" gorm:"column:player_id;comment:玩家标识;"`                                                                                              //玩家标识
+	ForbiddenLogin            *bool  `bson:"ForbiddenLogin" json:"forbiddenLogin" form:"forbiddenLogin" gorm:"column:forbidden_login;comment:玩家是否被禁止登录：禁止登录-true;未禁止登录-false/空;"`                                         //禁止登录
+	ForbiddenInGameHeroExport *bool  `bson:"ForbiddenInGameHeroExport" json:"forbiddenInGameHeroExport" form:"forbiddenInGameHeroExport" gorm:"column:forbidden_in_game_hero_export;comment:是否禁止游戏内英雄导出：禁止-true;不禁止-其它;"` //禁止游戏内英雄导出
+	CreatedBy                 uint   `bson:"CreatedBy" gorm:"column:created_by;comment:创建者"`
+	UpdatedBy                 uint   `bson:"UpdatedBy" gorm:"column:updated_by;comment:更新者"`
+	DeletedBy                 uint   `bson:"DeletedBy" gorm:"column:deleted_by;comment:删除者"`
 }
 
 // TableName 模块控制 AdminModuleControl自定义表名 admin_module_control
