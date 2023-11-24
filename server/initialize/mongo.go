@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/pkg/errors"
 	"github.com/qiniu/qmgo"
 	"github.com/qiniu/qmgo/options"
@@ -24,6 +25,10 @@ type (
 )
 
 func (m *mongo) Indexes(ctx context.Context) error {
+
+	service.ServiceGroupApp.GmServiceGroup.AdminModuleControlService.InitAdminModuleControlIndexes()
+	//indexMap[gm.AdminModuleControlCollection] = [][]string{{"AccountId"}}
+
 	// 表名:索引列表 列: "表名": [][]string{{"index1", "index2"}}
 	indexMap := map[string][][]string{}
 	for collection, indexes := range indexMap {
