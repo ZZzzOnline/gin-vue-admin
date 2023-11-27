@@ -309,8 +309,8 @@
           >
             <el-switch
               v-model="formData.forbiddenLogin"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
+              active-color="#ff4949"
+              inactive-color="#13ce66"
               active-text="是"
               inactive-text="否"
               clearable
@@ -322,8 +322,8 @@
           >
             <el-switch
               v-model="formData.forbiddenInGameHeroExport"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
+              active-color="#ff4949"
+              inactive-color="#13ce66"
               active-text="是"
               inactive-text="否"
               clearable
