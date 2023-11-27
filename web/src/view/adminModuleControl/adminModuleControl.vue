@@ -53,7 +53,7 @@
         >
 
           <el-input
-            v-model.number="searchInfo.accountId"
+            v-model="searchInfo.accountId"
             placeholder="搜索条件"
           />
 
@@ -296,7 +296,7 @@
             prop="accountId"
           >
             <el-input
-              v-model.number="formData.accountId"
+              v-model="formData.accountId"
               :clearable="false"
               placeholder="账号唯一标识"
               :disabled="true"
@@ -408,7 +408,7 @@ defineOptions({
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
   email: '',
-  accountId: 0,
+  accountId: null,
   playerId: '',
   forbiddenLogin: false,
   forbiddenInGameHeroExport: false,
@@ -469,6 +469,9 @@ const onSubmit = () => {
     if (!valid) return
     page.value = 1
     pageSize.value = 10
+    if (searchInfo.value.accountId === '') {
+      searchInfo.value.accountId = null
+    }
     if (searchInfo.value.forbiddenLogin === '') {
       searchInfo.value.forbiddenLogin = null
     }
@@ -616,7 +619,7 @@ const closeDetailShow = () => {
   detailShow.value = false
   formData.value = {
     email: '',
-    accountId: 0,
+    accountId: null,
     playerId: '',
     forbiddenLogin: false,
     forbiddenInGameHeroExport: false,
@@ -634,7 +637,7 @@ const closeDialog = () => {
   dialogFormVisible.value = false
   formData.value = {
     email: '',
-    accountId: 0,
+    accountId: null,
     playerId: '',
     forbiddenLogin: false,
     forbiddenInGameHeroExport: false,
