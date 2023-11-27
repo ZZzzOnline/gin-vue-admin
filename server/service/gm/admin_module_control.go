@@ -3,6 +3,7 @@ package gm
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -12,6 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.uber.org/zap"
 	"io"
 	"log"
 	"net/http"
@@ -26,37 +28,35 @@ const (
 type AdminModuleControlService struct {
 }
 
-func (adminModuleControlService *AdminModuleControlService) InitAdminModuleControlIndexes() {
-	collection, err := global.GVA_MONGO.Database.Collection(AdminModuleControlCollection).CloneCollection()
-	if err != nil {
-		panic(err)
-	}
+func (adminModuleControlService *AdminModuleControlService) InitAdminModuleControlIndexes() error {
+	adminModuleControlCollection := global.GVA_MONGODB.Collection(AdminModuleControlCollection)
 	{
 		indexOpts := new(options.IndexOptions)
 		indexOpts.SetName("_id_")
-		indexName, err := collection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
+		indexName, err := adminModuleControlCollection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
 			Keys:    bson.D{{"_id", 1}},
 			Options: indexOpts,
 		})
 		if err != nil {
-			fmt.Print(err.Error())
-			panic(err)
+			return err
 		}
 		log.Println("created index:", indexName)
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 	}
 	{
 		indexOpts := new(options.IndexOptions)
 		indexOpts.SetName("AccountId_").SetUnique(true)
-		indexName, err := collection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
+		indexName, err := adminModuleControlCollection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
 			Keys:    bson.D{{"AccountId", 1}},
 			Options: indexOpts,
 		})
 		if err != nil {
-			fmt.Print(err.Error())
-			panic(err)
+			return err
 		}
 		log.Println("created index:", indexName)
 	}
+
+	return nil
 }
 
 // CreateAdminModuleControl 创建模块控制记录
@@ -93,26 +93,43 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 		return err
 	}
 
-	ctx := context.TODO()
-	_, err = global.GVA_MONGO.DoTransaction(ctx, func(sessCtx context.Context) (interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	session, err := global.GVA_MONGO.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	_, err = session.WithTransaction(ctx, func(sessCtx mongo.SessionContext) (interface{}, error) {
 		type User struct {
 			PlayerId  primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 			AccountId int64              `bson:"AccountId" json:"AccountId"` // primary key
 		}
 		var user User
-		err = global.GVA_MONGO.Database.Collection(UserCollection).Find(ctx, bson.M{}).One(&user)
+
+		opts := options.FindOne().SetSort(bson.D{{"AccountId", 1}})
+		err = global.GVA_MONGODB.Collection(UserCollection).FindOne(sessCtx, bson.M{"AccountId": accountResponse.ID}, opts).Decode(&user)
 		if err != nil {
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, fmt.Errorf("can not find the user in mongodb. err:%v", err)
+			}
 			return nil, err
 		}
+
 		adminModuleControl.AccountId = &accountResponse.ID
 		adminModuleControl.PlayerId = user.PlayerId.Hex()
 		adminModuleControl.CreatedAt = time.Now().UTC()
 		adminModuleControl.UpdatedAt = time.Now().UTC()
-		insertOneResult, err := global.GVA_MONGO.Database.Collection(AdminModuleControlCollection).InsertOne(ctx, adminModuleControl)
+
+		insertOneResult, err := global.GVA_MONGODB.Collection(AdminModuleControlCollection).InsertOne(sessCtx, adminModuleControl)
 		if err != nil {
 			return nil, err
 		}
+
 		adminModuleControl.ID = insertOneResult.InsertedID.(primitive.ObjectID)
+
 		return nil, nil
 	})
 
@@ -166,40 +183,62 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 // GetAdminModuleControlInfoList 分页获取模块控制记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) GetAdminModuleControlInfoList(info gmReq.AdminModuleControlSearch) (list []gm.AdminModuleControl, total int64, err error) {
-	//limit := info.PageSize
-	//offset := info.PageSize * (info.Page - 1)
-	//// 创建db
-	//db := global.GVA_MONGO.Model(&gm.AdminModuleControl{})
-	//var adminModuleControls []gm.AdminModuleControl
-	//// 如果有条件搜索 下方会自动创建搜索语句
-	//if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-	//	db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
-	//}
-	//if info.Email != "" {
-	//	db = db.Where("email LIKE ?", "%"+info.Email+"%")
-	//}
-	//if info.AccountId != nil {
-	//	db = db.Where("account_id = ?", info.AccountId)
-	//}
-	//if info.PlayerId != "" {
-	//	db = db.Where("player_id LIKE ?", "%"+info.PlayerId+"%")
-	//}
-	//if info.ForbiddenLogin != nil {
-	//	db = db.Where("forbidden_login = ?", info.ForbiddenLogin)
-	//}
-	//if info.ForbiddenInGameHeroExport != nil {
-	//	db = db.Where("forbidden_in_game_hero_export = ?", info.ForbiddenInGameHeroExport)
-	//}
-	//err = db.Count(&total).Error
-	//if err != nil {
-	//	return
-	//}
-	//
-	//if limit != 0 {
-	//	db = db.Limit(limit).Offset(offset)
-	//}
-	//
-	//err = db.Find(&adminModuleControls).Error
-	//return adminModuleControls, total, err
-	return nil, 0, nil
+
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+
+	// 条件搜索
+	filter := bson.M{}
+	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
+		filter["CreatedAt"] = bson.M{"$gte": info.StartCreatedAt, "$lte": info.EndCreatedAt}
+	}
+	if info.Email != "" {
+		filter["Email"] = bson.M{"$regex": info.Email}
+	}
+	if info.AccountId != nil {
+		filter["AccountId"] = info.AccountId
+	}
+	if info.PlayerId != "" {
+		filter["PlayerId"] = bson.M{"$regex": info.PlayerId}
+	}
+	if info.ForbiddenLogin != nil {
+		filter["ForbiddenLogin"] = info.ForbiddenLogin
+	}
+	if info.ForbiddenInGameHeroExport != nil {
+		filter["ForbiddenInGameHeroExport"] = info.ForbiddenInGameHeroExport
+	}
+
+	var adminModuleControls []gm.AdminModuleControl
+
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	session, err := global.GVA_MONGO.StartSession()
+	if err != nil {
+		return nil, 0, err
+	}
+	defer session.EndSession(ctx)
+
+	_, err = session.WithTransaction(ctx, func(sessCtx mongo.SessionContext) (interface{}, error) {
+		total, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).CountDocuments(sessCtx, filter)
+		if err != nil {
+			return nil, err
+		}
+
+		opts := options.Find()
+		if limit != 0 {
+			opts.SetLimit(int64(limit))
+			opts.SetSkip(int64(offset))
+		}
+		cursor, err := global.GVA_MONGODB.Collection(AdminModuleControlCollection).Find(sessCtx, filter, opts)
+		if err != nil {
+			return nil, err
+		}
+
+		err = cursor.All(sessCtx, &adminModuleControls)
+
+		return nil, nil
+	})
+
+	return adminModuleControls, total, err
 }

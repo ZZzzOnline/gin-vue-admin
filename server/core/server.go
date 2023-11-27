@@ -20,7 +20,7 @@ func RunWindowsServer() {
 		initialize.Redis()
 	}
 	if global.GVA_CONFIG.System.UseMongo {
-		err := initialize.Mongo.Initialization()
+		err := initialize.MongoOfficial.Initialization()
 		if err != nil {
 			zap.L().Error(fmt.Sprintf("%+v", err))
 		}
