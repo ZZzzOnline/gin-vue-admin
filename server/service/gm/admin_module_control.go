@@ -138,15 +138,17 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 // DeleteAdminModuleControl 删除模块控制记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleControl(adminModuleControl gm.AdminModuleControl) (err error) {
-	//err = global.GVA_MONGO.Transaction(func(tx *gorm.DB) error {
-	//	if err := tx.Model(&gm.AdminModuleControl{}).Where("id = ?", adminModuleControl.ID).Update("deleted_by", adminModuleControl.DeletedBy).Error; err != nil {
-	//		return err
-	//	}
-	//	if err = tx.Delete(&adminModuleControl).Error; err != nil {
-	//		return err
-	//	}
-	//	return nil
-	//})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).UpdateByID(ctx, adminModuleControl.ID, bson.M{
+		"$set": bson.M{
+			"DeletedAt": time.Now().UTC(),
+			"DeletedBy": adminModuleControl.DeletedBy,
+		},
+	})
+
 	return err
 }
 
@@ -168,7 +170,7 @@ func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleCon
 // UpdateAdminModuleControl 更新模块控制记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) UpdateAdminModuleControl(adminModuleControl gm.AdminModuleControl) (err error) {
-	//err = global.GVA_MONGO.Save(&adminModuleControl).Error
+
 	if adminModuleControl.ID != *adminModuleControl.AccountId {
 		return fmt.Errorf("adminModuleControl.ID:%d != *adminModuleControl.AccountId:%d", adminModuleControl.ID, adminModuleControl.AccountId)
 	}
