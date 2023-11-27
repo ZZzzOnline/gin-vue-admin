@@ -222,7 +222,13 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 		filter["CreatedAt"] = bson.M{"$gte": info.StartCreatedAt, "$lte": info.EndCreatedAt}
 	}
 	if info.Email != "" {
-		filter["Email"] = bson.M{"$regex": info.Email}
+		//模糊查询
+		filter["Email"] = bson.M{"$regex": primitive.Regex{
+			Pattern: info.Email,
+			Options: "is",
+		}}
+		//精确匹配
+		//filter["Email"] = info.Email
 	}
 	if info.AccountId != nil {
 		filter["AccountId"] = info.AccountId
