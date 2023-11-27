@@ -78,6 +78,11 @@
             placeholder="请选择"
           >
             <el-option
+              key="ignore"
+              label="忽略"
+              value=""
+            />
+            <el-option
               key="true"
               label="是"
               value="true"
@@ -98,6 +103,11 @@
             clearable
             placeholder="请选择"
           >
+            <el-option
+              key="ignore"
+              label="忽略"
+              value=""
+            />
             <el-option
               key="true"
               label="是"
