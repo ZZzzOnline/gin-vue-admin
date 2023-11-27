@@ -73,7 +73,7 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 		CreatedAt  int    `json:"createdAt"`
 		UpdatedAt  int    `json:"updatedAt"`
 	}
-	resp, err := http.DefaultClient.Get("https://tomato-seascape-auth.blocklords.com/api/account/email/zhaojihuionline@outlook.com")
+	resp, err := http.DefaultClient.Get("https://tomato-seascape-auth.blocklords.com/api/account/email/" + adminModuleControl.Email)
 	if err != nil {
 		return err
 	}
@@ -155,15 +155,21 @@ func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleCon
 // DeleteAdminModuleControlByIds 批量删除模块控制记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleControlByIds(ids request.IdsReq, deleted_by uint) (err error) {
-	//err = global.GVA_MONGO.Transaction(func(tx *gorm.DB) error {
-	//	if err := tx.Model(&gm.AdminModuleControl{}).Where("id in ?", ids.Ids).Update("deleted_by", deleted_by).Error; err != nil {
-	//		return err
-	//	}
-	//	if err := tx.Where("id in ?", ids.Ids).Delete(&gm.AdminModuleControl{}).Error; err != nil {
-	//		return err
-	//	}
-	//	return nil
-	//})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).UpdateMany(ctx,
+		bson.M{
+			"_id": bson.M{"$in": ids.Ids},
+		},
+		bson.M{
+			"$set": bson.M{
+				"DeletedAt": time.Now().UTC(),
+				"DeletedBy": deleted_by,
+			},
+		})
+
 	return err
 }
 
