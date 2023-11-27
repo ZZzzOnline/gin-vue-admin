@@ -234,7 +234,10 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 		filter["AccountId"] = info.AccountId
 	}
 	if info.PlayerId != "" {
-		filter["PlayerId"] = bson.M{"$regex": info.PlayerId}
+		//模糊匹配
+		//filter["PlayerId"] = bson.M{"$regex": info.PlayerId}
+		//精确匹配
+		filter["PlayerId"] = info.PlayerId
 	}
 	if info.ForbiddenLogin != nil {
 		filter["ForbiddenLogin"] = info.ForbiddenLogin
