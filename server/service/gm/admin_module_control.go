@@ -169,6 +169,17 @@ func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleCon
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) UpdateAdminModuleControl(adminModuleControl gm.AdminModuleControl) (err error) {
 	//err = global.GVA_MONGO.Save(&adminModuleControl).Error
+	if adminModuleControl.ID != *adminModuleControl.AccountId {
+		return fmt.Errorf("adminModuleControl.ID:%d != *adminModuleControl.AccountId:%d", adminModuleControl.ID, adminModuleControl.AccountId)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).UpdateByID(ctx, adminModuleControl.ID, bson.M{
+		"$set": adminModuleControl,
+	})
+
 	return err
 }
 
