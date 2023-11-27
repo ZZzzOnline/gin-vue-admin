@@ -193,7 +193,7 @@
           align="left"
           label="玩家标识"
           prop="playerId"
-          width="120"
+          width="220"
         />
         <el-table-column
           align="left"
