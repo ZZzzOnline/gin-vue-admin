@@ -118,17 +118,16 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 			return nil, err
 		}
 
+		adminModuleControl.ID = accountResponse.ID
 		adminModuleControl.AccountId = &accountResponse.ID
 		adminModuleControl.PlayerId = user.PlayerId.Hex()
 		adminModuleControl.CreatedAt = time.Now().UTC()
 		adminModuleControl.UpdatedAt = time.Now().UTC()
 
-		insertOneResult, err := global.GVA_MONGODB.Collection(AdminModuleControlCollection).InsertOne(sessCtx, adminModuleControl)
+		_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).InsertOne(sessCtx, adminModuleControl)
 		if err != nil {
 			return nil, err
 		}
-
-		adminModuleControl.ID = insertOneResult.InsertedID.(primitive.ObjectID)
 
 		return nil, nil
 	})
@@ -175,8 +174,19 @@ func (adminModuleControlService *AdminModuleControlService) UpdateAdminModuleCon
 
 // GetAdminModuleControl 根据id获取模块控制记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (adminModuleControlService *AdminModuleControlService) GetAdminModuleControl(id primitive.ObjectID) (adminModuleControl gm.AdminModuleControl, err error) {
+func (adminModuleControlService *AdminModuleControlService) GetAdminModuleControl(id uint) (adminModuleControl gm.AdminModuleControl, err error) {
 	//err = global.GVA_MONGO.Where("id = ?", id).First(&adminModuleControl).Error
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
+	opts := options.FindOne().SetSort(bson.D{{"AccountId", 1}})
+	err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(ctx, bson.M{"AccountId": id}, opts).Decode(&adminModuleControl)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return adminModuleControl, fmt.Errorf("can not find the user in mongodb. err:%v", err)
+		}
+		return adminModuleControl, err
+	}
 	return
 }
 
