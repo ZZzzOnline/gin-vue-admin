@@ -202,8 +202,28 @@ func (adminModuleControlService *AdminModuleControlService) UpdateAdminModuleCon
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
-	_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).UpdateByID(ctx, adminModuleControl.ID, bson.M{
-		"$set": adminModuleControl,
+	session, err := global.GVA_MONGO.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	_, err = session.WithTransaction(ctx, func(sessCtx mongo.SessionContext) (interface{}, error) {
+		// 检查是否已被删除
+		var result bson.M
+		err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(sessCtx, bson.M{
+			"_id":       adminModuleControl.ID,
+			"DeletedAt": nil,
+		}).Decode(&result)
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).UpdateByID(ctx, adminModuleControl.ID, bson.M{
+			"$set": adminModuleControl,
+		})
+
+		return nil, nil
 	})
 
 	return err
@@ -217,7 +237,7 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 	defer cancel()
 
 	opts := options.FindOne().SetSort(bson.D{{"_id", 1}})
-	err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(ctx, bson.M{"AccountId": id}, opts).Decode(&adminModuleControl)
+	err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(ctx, bson.M{"_id": id}, opts).Decode(&adminModuleControl)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return adminModuleControl, fmt.Errorf("can not find the user in mongodb. err:%v", err)
@@ -263,6 +283,9 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 	if info.ForbiddenInGameHeroExport != nil {
 		filter["ForbiddenInGameHeroExport"] = info.ForbiddenInGameHeroExport
 	}
+
+	// 未被删除
+	filter["DeletedAt"] = nil
 
 	var adminModuleControls []gm.AdminModuleControl
 
