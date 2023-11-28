@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	unique_service "github.com/flipped-aurora/gin-vue-admin/server/global/unique"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/gm"
 	gmReq "github.com/flipped-aurora/gin-vue-admin/server/model/gm/request"
@@ -32,7 +33,7 @@ func (adminModuleControlService *AdminModuleControlService) InitAdminModuleContr
 	adminModuleControlCollection := global.GVA_MONGODB.Collection(AdminModuleControlCollection)
 	{
 		indexOpts := new(options.IndexOptions)
-		indexOpts.SetName("_id_")
+		indexOpts.SetName("_id_").SetUnique(true)
 		indexName, err := adminModuleControlCollection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
 			Keys:    bson.D{{"_id", 1}},
 			Options: indexOpts,
@@ -43,18 +44,18 @@ func (adminModuleControlService *AdminModuleControlService) InitAdminModuleContr
 		log.Println("created index:", indexName)
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 	}
-	{
-		indexOpts := new(options.IndexOptions)
-		indexOpts.SetName("AccountId_").SetUnique(true)
-		indexName, err := adminModuleControlCollection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
-			Keys:    bson.D{{"AccountId", 1}},
-			Options: indexOpts,
-		})
-		if err != nil {
-			return err
-		}
-		log.Println("created index:", indexName)
-	}
+	//{
+	//	indexOpts := new(options.IndexOptions)
+	//	indexOpts.SetName("AccountId_").SetUnique(true)
+	//	indexName, err := adminModuleControlCollection.Indexes().CreateOne(context.Background(), mongo.IndexModel{
+	//		Keys:    bson.D{{"AccountId", 1}},
+	//		Options: indexOpts,
+	//	})
+	//	if err != nil {
+	//		return err
+	//	}
+	//	log.Println("created index:", indexName)
+	//}
 
 	return nil
 }
@@ -109,7 +110,7 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 		}
 		var user User
 
-		opts := options.FindOne().SetSort(bson.D{{"AccountId", 1}})
+		opts := options.FindOne().SetSort(bson.D{{"_id", 1}})
 		err = global.GVA_MONGODB.Collection(UserCollection).FindOne(sessCtx, bson.M{"AccountId": accountResponse.ID}, opts).Decode(&user)
 		if err != nil {
 			if errors.Is(err, mongo.ErrNoDocuments) {
@@ -118,7 +119,28 @@ func (adminModuleControlService *AdminModuleControlService) CreateAdminModuleCon
 			return nil, err
 		}
 
-		adminModuleControl.ID = accountResponse.ID
+		// 未删除的AccountId检查
+		var result bson.M
+		err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(sessCtx, bson.M{
+			"AccountId": user.AccountId,
+			"DeletedAt": nil,
+		}).Decode(&result)
+		if err != nil {
+			if !errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, err
+			}
+		}
+		if result != nil {
+			return nil, fmt.Errorf("the same AccountId:%d that has not been deleted already exists", user.AccountId)
+		}
+
+		// 获取自增的唯一索引
+		uniqueId, err := unique_service.UniqueServiceInstance().GetNextSequenceValue(unique_service.AdminModuleControl)
+		if err != nil {
+			return nil, err
+		}
+
+		adminModuleControl.ID = uint(uniqueId)
 		adminModuleControl.AccountId = &accountResponse.ID
 		adminModuleControl.PlayerId = user.PlayerId.Hex()
 		adminModuleControl.CreatedAt = time.Now().UTC()
@@ -177,10 +199,6 @@ func (adminModuleControlService *AdminModuleControlService) DeleteAdminModuleCon
 // Author [piexlmax](https://github.com/piexlmax)
 func (adminModuleControlService *AdminModuleControlService) UpdateAdminModuleControl(adminModuleControl gm.AdminModuleControl) (err error) {
 
-	if adminModuleControl.ID != *adminModuleControl.AccountId {
-		return fmt.Errorf("adminModuleControl.ID:%d != *adminModuleControl.AccountId:%d", adminModuleControl.ID, adminModuleControl.AccountId)
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
@@ -198,7 +216,7 @@ func (adminModuleControlService *AdminModuleControlService) GetAdminModuleContro
 	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
-	opts := options.FindOne().SetSort(bson.D{{"AccountId", 1}})
+	opts := options.FindOne().SetSort(bson.D{{"_id", 1}})
 	err = global.GVA_MONGODB.Collection(AdminModuleControlCollection).FindOne(ctx, bson.M{"AccountId": id}, opts).Decode(&adminModuleControl)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {

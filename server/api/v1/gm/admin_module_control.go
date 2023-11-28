@@ -1,6 +1,7 @@
 package gm
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -43,7 +44,7 @@ func (adminModuleControlApi *AdminModuleControlApi) CreateAdminModuleControl(c *
 	}
 	if err := adminModuleControlService.CreateAdminModuleControl(&adminModuleControl); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		response.FailWithMessage(fmt.Sprintf("创建失败: %v", err), c)
 	} else {
 		response.OkWithMessage("创建成功", c)
 	}
