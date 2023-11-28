@@ -11,7 +11,7 @@
  Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 28/11/2023 16:51:39
+ Date: 28/11/2023 16:53:43
 */
 
 SET NAMES utf8mb4;
@@ -1083,6 +1083,7 @@ INSERT INTO `sys_operation_records` VALUES (142, '2023-11-28 16:49:55.409', '202
 INSERT INTO `sys_operation_records` VALUES (143, '2023-11-28 16:49:59.480', '2023-11-28 16:49:59.480', NULL, '127.0.0.1', 'POST', '/user/setUserAuthorities', 200, 25689000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0', '', '{\"ID\":5,\"authorityIds\":[9528]}', '{\"code\":0,\"data\":{},\"msg\":\"修改成功\"}', 1);
 INSERT INTO `sys_operation_records` VALUES (144, '2023-11-28 16:50:05.722', '2023-11-28 16:50:05.722', NULL, '127.0.0.1', 'POST', '/user/setUserAuthorities', 200, 24431300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0', '', '{\"ID\":3,\"authorityIds\":[888]}', '{\"code\":0,\"data\":{},\"msg\":\"修改成功\"}', 1);
 INSERT INTO `sys_operation_records` VALUES (145, '2023-11-28 16:50:12.075', '2023-11-28 16:50:12.075', NULL, '127.0.0.1', 'POST', '/user/setUserAuthorities', 200, 22918800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0', '', '{\"ID\":2,\"authorityIds\":[888,9528,9666,8881]}', '{\"code\":0,\"data\":{},\"msg\":\"修改成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (146, '2023-11-28 16:52:57.168', '2023-11-28 16:52:57.168', NULL, '127.0.0.1', 'POST', '/user/setUserAuthorities', 200, 30677800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0', '', '{\"ID\":2,\"authorityIds\":[888]}', '{\"code\":0,\"data\":{},\"msg\":\"修改成功\"}', 1);
 
 -- ----------------------------
 -- Table structure for sys_user_authority
@@ -1102,9 +1103,6 @@ INSERT INTO `sys_user_authority` VALUES (1, 8881);
 INSERT INTO `sys_user_authority` VALUES (1, 9528);
 INSERT INTO `sys_user_authority` VALUES (1, 9666);
 INSERT INTO `sys_user_authority` VALUES (2, 888);
-INSERT INTO `sys_user_authority` VALUES (2, 8881);
-INSERT INTO `sys_user_authority` VALUES (2, 9528);
-INSERT INTO `sys_user_authority` VALUES (2, 9666);
 INSERT INTO `sys_user_authority` VALUES (3, 888);
 INSERT INTO `sys_user_authority` VALUES (4, 9666);
 INSERT INTO `sys_user_authority` VALUES (5, 9528);
@@ -1145,7 +1143,7 @@ CREATE TABLE `sys_users`  (
 -- Records of sys_users
 -- ----------------------------
 INSERT INTO `sys_users` VALUES (1, '2023-11-22 14:48:22.998', '2023-11-28 16:45:26.135', NULL, '74606597-bde3-4b34-8111-627657afac3d', 'admin', '$2a$10$NdHOquUyF6EkBznU81ShA.Bvgi1nTA2PXRGkrg4j5XJU8WN0rd1tu', '超级管理员', 'dark', 'https://qmplusimg.henrongyi.top/gva_header.jpg', '#fff', '#1890ff', 888, '', '', 1);
-INSERT INTO `sys_users` VALUES (2, '2023-11-28 16:45:01.280', '2023-11-28 16:50:12.056', NULL, '220a6ee2-87b8-472d-a1f4-4e9f51055ebf', 'michael', '$2a$10$QSmvRiupyz9sIVOgcQH7E.KjlQpcbJdydIeKn1BERqlsFeOToh8V6', '赵吉辉', 'dark', 'https://qmplusimg.henrongyi.top/1576554439myAvatar.png', '#fff', '#1890ff', 888, '13285519185', '33267419@qq.com', 1);
+INSERT INTO `sys_users` VALUES (2, '2023-11-28 16:45:01.280', '2023-11-28 16:52:57.143', NULL, '220a6ee2-87b8-472d-a1f4-4e9f51055ebf', 'michael', '$2a$10$QSmvRiupyz9sIVOgcQH7E.KjlQpcbJdydIeKn1BERqlsFeOToh8V6', '赵吉辉', 'dark', 'https://qmplusimg.henrongyi.top/1576554439myAvatar.png', '#fff', '#1890ff', 888, '13285519185', '33267419@qq.com', 1);
 INSERT INTO `sys_users` VALUES (3, '2023-11-23 17:06:28.762', '2023-11-28 16:50:05.701', NULL, 'ac1bae41-4bd8-41ff-9942-e18c75ebfdfc', 'huabro', '$2a$10$RnhxDby328GQG1wFgMzpwO0Np5pzl0WOrcM6/uCmtbvtUw7e6c1mi', '花园振', 'dark', 'https://qmplusimg.henrongyi.top/gva_header.jpg', '#fff', '#1890ff', 888, '17611111111', '333333333@qq.com', 1);
 INSERT INTO `sys_users` VALUES (5, '2023-11-23 17:03:28.510', '2023-11-28 16:49:59.459', NULL, '950c2135-4832-4d12-9e74-a2de9e2856d1', 'test', '$2a$10$F4WY/Ms2a3udm8X1JJrUwezWHQ3hai7zknM2B0TGxC.a6lFhd4IdC', '测试用户', 'dark', 'https://qmplusimg.henrongyi.top/gva_header.jpg', '#fff', '#1890ff', 9528, '17611111111', '333333333@qq.com', 1);
 INSERT INTO `sys_users` VALUES (6, '2023-11-23 17:04:56.684', '2023-11-28 16:49:55.388', NULL, '8423868d-ce08-41a2-afd3-a585c4de0c9c', 'ops', '$2a$10$3s3p29x7ihKyUxcilcnCWeFuHRqwNMOG7ejK1BafIKNgBtnsXR9De', '运维用户', 'dark', 'https://qmplusimg.henrongyi.top/gva_header.jpg', '#fff', '#1890ff', 9666, '17611111111', '333333333@qq.com', 1);
