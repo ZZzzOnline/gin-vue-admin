@@ -362,7 +362,7 @@
     >
       <el-scrollbar height="550px">
         <el-descriptions
-          column="1"
+          :column="1"
           border
         >
           <el-descriptions-item label="邮箱地址">
