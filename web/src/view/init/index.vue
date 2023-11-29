@@ -8,34 +8,34 @@
       >
         <div class=" text-lg">
           <div class="font-sans text-4xl font-bold text-center mb-4">GIN-VUE-ADMIN</div>
-          <p class="text-gray-600 mb-2">初始化须知</p>
-          <p class="text-gray-600 mb-2">1.您需有用一定的VUE和GOLANG基础</p>
-          <p class="text-gray-600 mb-2">2.请您确认是否已经阅读过<a
+          <p class="text-gray-600 mb-2">{{ t('init.note') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note1') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note2-1') }}<a
             class="text-blue-600 font-bold"
             href="https://www.gin-vue-admin.com"
             target="_blank"
-          >官方文档</a> <a
+          >{{ t('init.note2-2') }}</a> <a
             class="text-blue-600 font-bold"
             href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
             target="_blank"
-          >初始化视频</a></p>
-          <p class="text-gray-600 mb-2">3.请您确认是否了解后续的配置流程</p>
-          <p class="text-gray-600 mb-2">4.如果您使用mysql数据库，请确认数据库引擎为<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
-          <p class="text-gray-600 mb-2">注：开发组不为文档中书写过的内容提供无偿服务</p>
+          >{{ t('init.note2-3') }}</a></p>
+          <p class="text-gray-600 mb-2">{{ t('init.note3') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note4') }}<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
+          <p class="text-gray-600 mb-2">{{ t('init.note5') }}</p>
           <p class="flex items-center justify-between mt-8">
             <el-button
               type="primary"
               size="large"
               @click="goDoc"
             >
-              阅读文档
+              {{ t('init.readDocs') }}
             </el-button>
             <el-button
               type="primary"
               size="large"
               @click="showNext"
             >
-              我已确认
+              {{ t('init.confirm') }}
             </el-button>
           </p>
         </div>
@@ -51,10 +51,44 @@
           label-width="100px"
           size="large"
         >
-          <el-form-item label="数据库类型">
+          <!-- added by mohamed hassan to support multilangauge -->
+          <el-form-item :label="t('init.language')">
+            <el-select
+              v-model="form.language"
+              :placeholder="t('general.pleaseSelect')"
+              @change="changeLanguage"
+            >
+              <el-option
+                key="en"
+                label="English"
+                value="en"
+              ><img
+                src="@/assets/flags/en.svg"
+                class="img"
+              >English</el-option>
+              <el-option
+                key="zh"
+                label="中文"
+                value="zh"
+              ><img
+                src="@/assets/flags/zh.svg"
+                class="img"
+              >中文</el-option>
+              <el-option
+                key="ar"
+                label="العربية"
+                value="ar"
+              ><img
+                src="@/assets/flags/ar.svg"
+                class="img"
+              >العربية</el-option>
+            </el-select>
+          </el-form-item>
+          <!-- end of adding -->
+          <el-form-item :label="t('init.dbType')">
             <el-select
               v-model="form.dbType"
-              placeholder="请选择"
+              :placeholder="t('general.pleaseSelect')"
               class="w-full"
               @change="changeDB"
             >
@@ -87,29 +121,29 @@
           </el-form-item>
           <el-form-item
             v-if="form.dbType !== 'sqlite'"
-            label="host"
+            :label="t('init.dbHost')"
           >
             <el-input
               v-model="form.host"
-              placeholder="请输入数据库链接"
+              :placeholder="t('init.enterDBHost')"
             />
           </el-form-item>
           <el-form-item
             v-if="form.dbType !== 'sqlite'"
-            label="port"
+            :label="t('init.dbPort')"
           >
             <el-input
               v-model="form.port"
-              placeholder="请输入数据库端口"
+              :placeholder="t('init.enterDBPort')"
             />
           </el-form-item>
           <el-form-item
             v-if="form.dbType !== 'sqlite'"
-            label="userName"
+            :label="t('init.dbUsername')"
           >
             <el-input
               v-model="form.userName"
-              placeholder="请输入数据库用户名"
+              :placeholder="t('init.enterDBUsername')"
             />
           </el-form-item>
           <el-form-item
@@ -118,13 +152,13 @@
           >
             <el-input
               v-model="form.password"
-              placeholder="请输入数据库密码（没有则为空）"
+              :placeholder="t('init.enterDBPassword')"
             />
           </el-form-item>
-          <el-form-item label="dbName">
+          <el-form-item :label="t('init.dbName')">
             <el-input
               v-model="form.dbName"
-              placeholder="请输入数据库名称"
+              :placeholder="t('init.enterDBName')"
             />
           </el-form-item>
           <el-form-item
@@ -133,7 +167,7 @@
           >
             <el-input
               v-model="form.dbPath"
-              placeholder="请输入sqlite数据库文件存放路径"
+              :placeholder="t('init.enterSQLitePath')"
             />
           </el-form-item>
           <el-form-item>
@@ -141,7 +175,7 @@
               <el-button
                 type="primary"
                 @click="onSubmit"
-              >立即初始化</el-button>
+              >{{ t('init.initNow') }}</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -162,6 +196,11 @@ import { initDB } from '@/api/initdb'
 import { reactive, ref } from 'vue'
 import { ElLoading, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const i18n = useI18n() // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Init',
@@ -194,7 +233,8 @@ const form = reactive({
   userName: 'root',
   password: '',
   dbName: 'gva',
-  dbPath: ''
+  dbPath: '',
+  language: 'en' // added by mohamed hassan to support multilanguage
 })
 
 const changeDB = (val) => {
@@ -269,7 +309,7 @@ const changeDB = (val) => {
 const onSubmit = async() => {
   const loading = ElLoading.service({
     lock: true,
-    text: '正在初始化数据库，请稍候',
+    text: t('init.pleaseWait'),
     spinner: 'loading',
     background: 'rgba(0, 0, 0, 0.7)',
   })
@@ -288,9 +328,19 @@ const onSubmit = async() => {
     loading.close()
   }
 }
+// added by mohamed hassan to support multilanguage
+const changeLanguage = (val) => {
+  i18n.locale.value = val
+}
 </script>
 
 <style lang="scss" scoped>
+
+img {
+  padding-right: 20px;
+  width: 20px;
+  height: 20px;
+}
 
 .slide-in-fwd-top {
   -webkit-animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)

@@ -225,3 +225,8 @@ zap:
     max-age: 0
     show-line: true
     log-in-console: true
+
+# support multi-language
+language:
+    language: en
+    dir: ./resource/lang/

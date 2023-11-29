@@ -5,22 +5,22 @@
         :inline="true"
         :model="searchInfo"
       >
-        <el-form-item label="请求方法">
+        <el-form-item :label="t('view.operation.sysOperationRecord.requestMethod')">
           <el-input
             v-model="searchInfo.method"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
         </el-form-item>
-        <el-form-item label="请求路径">
+        <el-form-item :label="t('view.operation.sysOperationRecord.requestPath')">
           <el-input
             v-model="searchInfo.path"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
         </el-form-item>
-        <el-form-item label="结果状态码">
+        <el-form-item :label="t('view.operation.sysOperationRecord.resultStatusCode')">
           <el-input
             v-model="searchInfo.status"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
         </el-form-item>
         <el-form-item>
@@ -28,11 +28,11 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >查询</el-button>
+          >{{ t('general.search') }}</el-button>
           <el-button
             icon="refresh"
             @click="onReset"
-          >重置</el-button>
+          >{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -44,17 +44,17 @@
           placement="top"
           width="160"
         >
-          <p>确定要删除吗？</p>
+          <p>{{ t('general.deleteConfirm') }}</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button
               type="primary"
               link
               @click="deleteVisible = false"
-            >取消</el-button>
+            >{{ t('general.cancel') }}</el-button>
             <el-button
               type="primary"
               @click="onDelete"
-            >确定</el-button>
+            >{{ t('general.confirm') }}</el-button>
           </div>
           <template #reference>
             <el-button
@@ -62,7 +62,7 @@
               style="margin-left: 10px;"
               :disabled="!multipleSelection.length"
               @click="deleteVisible = true"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-popover>
       </div>
@@ -81,7 +81,7 @@
         />
         <el-table-column
           align="left"
-          label="操作人"
+          :label="t('view.operation.sysOperationRecord.operator')"
           width="140"
         >
           <template #default="scope">
@@ -90,14 +90,14 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="日期"
+          :label="t('general.createdAt')"
           width="180"
         >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="状态码"
+          :label="t('view.operation.sysOperationRecord.statusCode')"
           prop="status"
           width="120"
         >
@@ -109,25 +109,25 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="请求IP"
+          :label="t('view.operation.sysOperationRecord.requestIP')"
           prop="ip"
           width="120"
         />
         <el-table-column
           align="left"
-          label="请求方法"
+          :label="t('view.operation.sysOperationRecord.requestMethod')"
           prop="method"
           width="120"
         />
         <el-table-column
           align="left"
-          label="请求路径"
+          :label="t('view.operation.sysOperationRecord.requestPath')"
           prop="path"
           width="240"
         />
         <el-table-column
           align="left"
-          label="请求"
+          :label="t('general.request')"
           prop="path"
           width="80"
         >
@@ -146,13 +146,13 @@
                 </template>
               </el-popover>
 
-              <span v-else>无</span>
+              <span v-else>{{ t('view.operation.sysOperationRecord.none') }}</span>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="响应"
+          :label="t('view.operation.sysOperationRecord.response')"
           prop="path"
           width="80"
         >
@@ -170,13 +170,13 @@
                   <el-icon style="cursor: pointer;"><warning /></el-icon>
                 </template>
               </el-popover>
-              <span v-else>无</span>
+              <span v-else>{{ t('view.operation.sysOperationRecord.none') }}</span>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="操作"
+          :label="t('general.operations')"
         >
           <template #default="scope">
             <el-popover
@@ -184,17 +184,17 @@
               placement="top"
               width="160"
             >
-              <p>确定要删除吗？</p>
+              <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button
                   type="primary"
                   link
                   @click="scope.row.visible = false"
-                >取消</el-button>
+                >{{ t('general.cancel') }}</el-button>
                 <el-button
                   type="primary"
                   @click="deleteSysOperationRecordFunc(scope.row)"
-                >确定</el-button>
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button
@@ -202,7 +202,7 @@
                   type="primary"
                   link
                   @click="scope.row.visible = true"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -232,6 +232,9 @@ import {
 import { formatDate } from '@/utils/format'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'SysOperationRecord'
@@ -298,7 +301,7 @@ const onDelete = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === ids.length && page.value > 1) {
       page.value--
@@ -313,7 +316,7 @@ const deleteSysOperationRecordFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--

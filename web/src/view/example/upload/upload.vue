@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="日期"
+          :label="t('general.createdAt')"
           prop="UpdatedAt"
           width="180"
         >
@@ -86,7 +86,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="操作"
+          :label="t('general.operations')"
           width="160"
         >
           <template #default="scope">
@@ -101,7 +101,7 @@
               type="primary"
               link
               @click="deleteFileFunc(scope.row)"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -132,6 +132,9 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Upload',
@@ -172,9 +175,9 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning',
   })
     .then(async() => {

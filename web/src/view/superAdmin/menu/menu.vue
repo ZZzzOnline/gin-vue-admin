@@ -6,7 +6,7 @@
           type="primary"
           icon="plus"
           @click="addMenu('0')"
-        >新增根菜单</el-button>
+        >{{ t('menu.addRootMenu') }}</el-button>
         <el-icon
           class="cursor-pointer"
           @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e')"
@@ -26,7 +26,7 @@
         />
         <el-table-column
           align="left"
-          label="展示名称"
+          :label="t('menu.displayName')"
           min-width="120"
           prop="authorityName"
         >
@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="图标"
+          :label="t('menu.icon')"
           min-width="140"
           prop="authorityName"
         >
@@ -54,50 +54,50 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="路由Name"
+          :label="t('menu.routeName')"
           show-overflow-tooltip
           min-width="160"
           prop="name"
         />
         <el-table-column
           align="left"
-          label="路由Path"
+          :label="t('menu.routePath')"
           show-overflow-tooltip
           min-width="160"
           prop="path"
         />
         <el-table-column
           align="left"
-          label="是否隐藏"
+          :label="t('menu.visibility')"
           min-width="100"
           prop="hidden"
         >
           <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+            <span>{{ scope.row.hidden? t('menu.hide') : t('menu.show') }}</span>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="父节点"
+          :label="t('menu.parent')"
           min-width="90"
           prop="parentId"
         />
         <el-table-column
           align="left"
-          label="排序"
+          :label="t('menu.sort')"
           min-width="70"
           prop="sort"
         />
         <el-table-column
           align="left"
-          label="文件路径"
+          :label="t('menu.filePath')"
           min-width="360"
           prop="component"
         />
         <el-table-column
           align="left"
           fixed="right"
-          label="操作"
+          :label="t('general.operations')"
           width="300"
         >
           <template #default="scope">
@@ -106,20 +106,20 @@
               link
               icon="plus"
               @click="addMenu(scope.row.ID)"
-            >添加子菜单</el-button>
+            >{{ t('menu.addSubMenu') }}</el-button>
             <el-button
               type="primary"
               link
               icon="edit"
               @click="editMenu(scope.row.ID)"
-            >编辑</el-button>
+            >{{ t('general.edit') }}</el-button>
             <el-button
 
               type="primary"
               link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -129,7 +129,7 @@
       :before-close="handleClose"
       :title="dialogTitle"
     >
-      <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
+      <warning-bar :title="t('menu.newMenuNote')" />
       <el-form
         v-if="dialogFormVisible"
         ref="menuForm"
@@ -137,17 +137,17 @@
         :model="form"
         :rules="rules"
         label-position="top"
-        label-width="85px"
+        label-width="100px"
       >
         <el-form-item
-          label="路由Name"
+          :label="t('menu.routeName')"
           prop="path"
           style="width:30%"
         >
           <el-input
             v-model="form.name"
             autocomplete="off"
-            placeholder="唯一英文字符串"
+            :placeholder="t('menu.routeNameNote')"
             @change="changeName"
           />
         </el-form-item>
@@ -157,11 +157,11 @@
         >
           <template #label>
             <span style="display: inline-flex;align-items: center;">
-              <span>路由Path</span>
+              <span>{{ t('menu.routePath') }}</span>
               <el-checkbox
                 v-model="checkFlag"
                 style="margin-left:12px;height: auto"
-              >添加参数</el-checkbox>
+              >{{ t('menu.addParameter') }}</el-checkbox>
             </span>
           </template>
 
@@ -169,29 +169,29 @@
             v-model="form.path"
             :disabled="!checkFlag"
             autocomplete="off"
-            placeholder="建议只在后方拼接参数"
+            :placeholder="t('menu.routePathNote')"
           />
         </el-form-item>
         <el-form-item
-          label="是否隐藏"
+          :label="t('menu.visibility')"
           style="width:30%"
         >
           <el-select
             v-model="form.hidden"
-            placeholder="是否在列表隐藏"
+            :placeholder="t('menu.visibilityNote')"
           >
             <el-option
               :value="false"
-              label="否"
+              :label="t('general.no')"
             />
             <el-option
               :value="true"
-              label="是"
+              :label="t('general.yes')"
             />
           </el-select>
         </el-form-item>
         <el-form-item
-          label="父节点ID"
+          :label="t('menu.parentId')"
           style="width:30%"
         >
           <el-cascader
@@ -205,7 +205,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="文件路径"
+          :label="t('menu.filePath')"
           prop="component"
           style="width:60%"
         >
@@ -215,13 +215,13 @@
             placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
             @blur="fmtComponent"
           />
-          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button
+          <span style="font-size:12px;margin-right:12px;">{{ t('menu.subMenuNote') }}</span><el-button
             style="margin-top:4px"
             @click="form.component = 'view/routerHolder.vue'"
-          >点我设置</el-button>
+          >{{ t('menu.clickMe') }}</el-button>
         </el-form-item>
         <el-form-item
-          label="展示名称"
+          :label="t('menu.displayName')"
           prop="meta.title"
           style="width:30%"
         >
@@ -231,7 +231,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="图标"
+          :label="t('menu.icon')"
           prop="meta.icon"
           style="width:30%"
         >
@@ -241,7 +241,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="排序标记"
+          :label="t('general.order')"
           prop="sort"
           style="width:30%"
         >
@@ -280,15 +280,15 @@
           <el-select
             v-model="form.meta.keepAlive"
             style="width:100%"
-            placeholder="是否keepAlive缓存页面"
+            :placeholder="t('menu.keepAliveNote')"
           >
             <el-option
               :value="false"
-              label="否"
+              :label="t('general.no')"
             />
             <el-option
               :value="true"
-              label="是"
+              :label="t('general.yes')"
             />
           </el-select>
         </el-form-item>
@@ -300,15 +300,15 @@
           <el-select
             v-model="form.meta.closeTab"
             style="width:100%"
-            placeholder="是否自动关闭tab"
+            :placeholder="t('menu.closeTabNote')"
           >
             <el-option
               :value="false"
-              label="否"
+              :label="t('general.no')"
             />
             <el-option
               :value="true"
-              label="是"
+              :label="t('general.yes')"
             />
           </el-select>
         </el-form-item>
@@ -348,7 +348,7 @@
             type="primary"
             icon="edit"
             @click="addParameter(form)"
-          >新增菜单参数</el-button>
+          >{{ t('menu.addMenuParameters') }}</el-button>
           <el-icon
             class="cursor-pointer"
             @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e')"
@@ -361,13 +361,13 @@
           <el-table-column
             align="left"
             prop="type"
-            label="参数类型"
+            :label="t('menu.parameterType')"
             width="180"
           >
             <template #default="scope">
               <el-select
                 v-model="scope.row.type"
-                placeholder="请选择"
+                :placeholder="t('general.pleaseSelect')"
               >
                 <el-option
                   key="query"
@@ -385,7 +385,7 @@
           <el-table-column
             align="left"
             prop="key"
-            label="参数key"
+            :label="t('menu.paremeterKey')"
             width="180"
           >
             <template #default="scope">
@@ -397,7 +397,7 @@
           <el-table-column
             align="left"
             prop="value"
-            label="参数值"
+            :label="t('menu.parameterValue')"
           >
             <template #default="scope">
               <div>
@@ -413,7 +413,7 @@
 
                   icon="delete"
                   @click="deleteParameter(form.parameters,scope.$index)"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -424,7 +424,7 @@
             type="primary"
             icon="edit"
             @click="addBtn(form)"
-          >新增可控按钮
+          >{{ t('menu.addButton') }}
           </el-button>
           <el-icon
             class="cursor-pointer"
@@ -443,7 +443,7 @@
           <el-table-column
             align="left"
             prop="name"
-            label="按钮名称"
+            :label="t('menu.buttonName')"
             width="180"
           >
             <template #default="scope">
@@ -455,7 +455,7 @@
           <el-table-column
             align="left"
             prop="name"
-            label="备注"
+            :label="t('menu.comments')"
             width="180"
           >
             <template #default="scope">
@@ -472,7 +472,7 @@
 
                   icon="delete"
                   @click="deleteBtn(form.menuBtn,scope.$index)"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -480,11 +480,11 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
+          <el-button @click="closeDialog">{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
             @click="enterDialog"
-          >确 定</el-button>
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -505,20 +505,22 @@ import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled, VideoCameraFilled } from '@element-plus/icons-vue'
-
 import { toDoc } from '@/utils/doc'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Menus',
 })
 
 const rules = reactive({
-  path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
+  path: [{ required: true, message: t('menu.enterMenuNameNote'), trigger: 'blur' }],
   component: [
-    { required: true, message: '请输入文件路径', trigger: 'blur' }
+    { required: true, message: t('menu.enterFilePathNote'), trigger: 'blur' }
   ],
   'meta.title': [
-    { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+    { required: true, message: t('menu.enterMenuDisplayNameNote'), trigger: 'blur' }
   ]
 })
 
@@ -612,9 +614,9 @@ const handleClose = (done) => {
 }
 // 删除菜单
 const deleteMenu = (ID) => {
-  ElMessageBox.confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('menu.deleteAllRolesConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   })
     .then(async() => {
@@ -622,7 +624,7 @@ const deleteMenu = (ID) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
@@ -633,7 +635,7 @@ const deleteMenu = (ID) => {
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: '已取消删除'
+        message: t('general.undeleted')
       })
     })
 }
@@ -679,7 +681,7 @@ const enterDialog = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: isEdit.value ? '编辑成功' : '添加成功!'
+          message: isEdit.value ? t('general.editSuccess') : t('general.addSuccess')
         })
         getTableData()
       }
@@ -692,14 +694,14 @@ const enterDialog = async() => {
 const menuOption = ref([
   {
     ID: '0',
-    title: '根菜单'
+    title: t('menu.rootMenu')
   }
 ])
 const setOptions = () => {
   menuOption.value = [
     {
       ID: '0',
-      title: '根目录'
+      title: t('menu.rootDirctory')
     }
   ]
   setMenuOptions(tableData.value, menuOption.value, false)
@@ -733,9 +735,9 @@ const setMenuOptions = (menuData, optionsData, disabled) => {
 
 // 添加菜单方法，id为 0则为添加根菜单
 const isEdit = ref(false)
-const dialogTitle = ref('新增菜单')
+const dialogTitle = ref(t('menu.addMenu'))
 const addMenu = (id) => {
-  dialogTitle.value = '新增菜单'
+  dialogTitle.value = t('menu.addMenu')
   form.value.parentId = String(id)
   isEdit.value = false
   setOptions()
@@ -743,7 +745,7 @@ const addMenu = (id) => {
 }
 // 修改菜单方法
 const editMenu = async(id) => {
-  dialogTitle.value = '编辑菜单'
+  dialogTitle.value = t('menu.editMenu')
   const res = await getBaseMenuById({ id })
   form.value = res.data.menu
   isEdit.value = true

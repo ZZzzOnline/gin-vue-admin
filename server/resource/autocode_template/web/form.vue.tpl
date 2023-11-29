@@ -5,25 +5,25 @@
       {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
       {{- if eq .FieldType "bool" }}
-          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" placeholder="请输入" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- if eq .FieldType "richtext" }}
           <RichEdit v-model="formData.{{.FieldJson}}"/>
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Clearable}}">
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="t('general.pleaseSelect')" :clearable="{{.Clearable}}">
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
@@ -48,8 +48,8 @@
        </el-form-item>
       {{- end }}
         <el-form-item>
-          <el-button type="primary" @click="save">保存</el-button>
-          <el-button type="primary" @click="back">返回</el-button>
+          <el-button type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
+          <el-button type="primary" @click="back">{{ "{{ t('general.back') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -72,6 +72,10 @@ import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 {{- if .HasPic }}
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
@@ -177,7 +181,7 @@ const save = async() => {
            if (res.code === 0) {
              ElMessage({
                type: 'success',
-               message: '创建/更改成功'
+               message:  t('general.createUpdateSuccess')
              })
            }
        })

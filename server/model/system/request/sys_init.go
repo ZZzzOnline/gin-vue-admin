@@ -14,6 +14,7 @@ type InitDB struct {
 	Password string `json:"password"`                  // 数据库密码
 	DBName   string `json:"dbName" binding:"required"` // 数据库名
 	DBPath   string `json:"dbPath"`                    // sqlite数据库文件路径
+	Language string `json:"language",omitempty`        // DB initial langauge // added by mohamed hassan to support multilanguage
 }
 
 // MysqlEmptyDsn msyql 空数据库 建库链接

@@ -13,6 +13,7 @@ import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
+import i18n from './i18n' // added by mohamed hassan to multilangauge
 import { initDom } from './utils/positionToCode'
 
 initDom()
@@ -37,6 +38,7 @@ app
   .use(store)
   .use(auth)
   .use(router)
+  .use(i18n)
   .mount('#app')
 
 export default app

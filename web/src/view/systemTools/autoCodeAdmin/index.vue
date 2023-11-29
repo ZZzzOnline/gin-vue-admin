@@ -6,7 +6,7 @@
           type="primary"
           icon="plus"
           @click="goAutoCode(null)"
-        >新增</el-button>
+        >{{ t("general.add") }}</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column
@@ -21,32 +21,32 @@
         />
         <el-table-column
           align="left"
-          label="日期"
+          :label="t('general.createdAt')"
           width="180"
         >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="结构体名"
+          :label="t('autoCode.structName')"
           min-width="150"
           prop="structName"
         />
         <el-table-column
           align="left"
-          label="结构体描述"
+          :label="t('autoCode.structChineseName')"
           min-width="150"
           prop="structCNName"
         />
         <el-table-column
           align="left"
-          label="表名称"
+          :label="t('autoCode.tableName')"
           min-width="150"
           prop="tableName"
         />
         <el-table-column
           align="left"
-          label="回滚标记"
+          :label="t('autoCodeAdmin.rollBackMark')"
           min-width="150"
           prop="flag"
         >
@@ -57,7 +57,7 @@
 
               effect="dark"
             >
-              已回滚
+              {{ t("autoCodeAdmin.rolledBack") }}
             </el-tag>
             <el-tag
               v-else
@@ -65,13 +65,13 @@
               type="success"
               effect="dark"
             >
-              未回滚
+              {{ t("autoCodeAdmin.notRolledBack") }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="操作"
+          :lable="t('general.operations')"
           min-width="240"
         >
           <template #default="scope">
@@ -81,23 +81,23 @@
                 link
                 :disabled="scope.row.flag === 1"
                 @click="rollbackFunc(scope.row,true)"
-              >回滚(删表)</el-button>
+              >{{ t("autoCodeAdmin.rollBackDeleteTable") }}</el-button>
               <el-button
                 type="primary"
                 link
                 :disabled="scope.row.flag === 1"
                 @click="rollbackFunc(scope.row,false)"
-              >回滚(不删表)</el-button>
+              >{{ t("autoCodeAdmin.rollBackWithoutDeleteTable") }}</el-button>
               <el-button
                 type="primary"
                 link
                 @click="goAutoCode(scope.row)"
-              >复用</el-button>
+              >{{ t("autoCodeAdmin.reuse") }}</el-button>
               <el-button
                 type="primary"
                 link
                 @click="deleteRow(scope.row)"
-              >删除</el-button>
+              >{{ t("general.delete") }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -123,6 +123,9 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import { formatDate } from '@/utils/format'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'AutoCodeAdmin'
@@ -163,52 +166,52 @@ const getTableData = async() => {
 getTableData()
 
 const deleteRow = async(row) => {
-  ElMessageBox.confirm('此操作将删除本历史, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('autoCodeAdmin.deleteHistoryConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     const res = await delSysHistory({ id: Number(row.ID) })
     if (res.code === 0) {
-      ElMessage.success('删除成功')
+      ElMessage.success(t('general.deleteSuccess'))
       getTableData()
     }
   })
 }
 const rollbackFunc = async(row, flag) => {
   if (flag) {
-    ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 是否继续?`, '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 是否继续?`, t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async() => {
       ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`, '会删除表', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
       }).then(async() => {
         ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`, '会删除表', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('general.confirm'),
+          cancelButtonText: t('general.cancel'),
           type: 'warning'
         }).then(async() => {
           const res = await rollback({ id: Number(row.ID), deleteTable: flag })
           if (res.code === 0) {
-            ElMessage.success('回滚成功')
+            ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
             getTableData()
           }
         })
       })
     })
   } else {
-    ElMessageBox.confirm(`此操作将删除自动创建的文件和api, 是否继续?`, '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('autoCodeAdmin.rollbackConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async() => {
       const res = await rollback({ id: Number(row.ID), deleteTable: flag })
       if (res.code === 0) {
-        ElMessage.success('回滚成功')
+        ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
         getTableData()
       }
     })
@@ -223,5 +226,4 @@ const goAutoCode = (row) => {
     router.push({ name: 'autoCode' })
   }
 }
-
 </script>

@@ -3,6 +3,8 @@ package system
 import (
 	"context"
 	"fmt"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -50,8 +52,8 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 	True := true
 	dicts[0].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "男", Value: 1, Status: &True, Sort: 1},
-		{Label: "女", Value: 2, Status: &True, Sort: 2},
+		{Label: global.Translate("system.dictionary_detail.male"), Value: 1, Status: &True, Sort: 1},
+		{Label: global.Translate("system.dictionary_detail.female"), Value: 2, Status: &True, Sort: 2},
 	}
 
 	dicts[1].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
@@ -93,7 +95,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	for _, dict := range dicts {
 		if err := db.Model(&dict).Association("SysDictionaryDetails").
 			Replace(dict.SysDictionaryDetails); err != nil {
-			return ctx, errors.Wrap(err, sysModel.SysDictionaryDetail{}.TableName()+"表数据初始化失败!")
+			return ctx, errors.Wrap(err, sysModel.SysDictionaryDetail{}.TableName()+" "+"general.tabelDataInitFail")
 		}
 	}
 	return ctx, nil

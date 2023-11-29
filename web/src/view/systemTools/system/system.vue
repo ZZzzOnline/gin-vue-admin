@@ -8,10 +8,10 @@
       <!--  System start  -->
       <el-collapse v-model="activeNames">
         <el-collapse-item
-          title="系统配置"
+          :title="t('view.systemTools.system.systemConfig')"
           name="1"
         >
-          <el-form-item label="环境值">
+          <el-form-item :label="t('view.systemTools.system.envValue')">
             <!-- <el-input v-model="config.system.env" />-->
             <el-select
               v-model="config.system.env"
@@ -21,10 +21,10 @@
               <el-option value="develop" />
             </el-select>
           </el-form-item>
-          <el-form-item label="端口值">
+          <el-form-item :label="t('view.systemTools.system.portValue')">
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
-          <el-form-item label="数据库类型">
+          <el-form-item :label="t('view.systemTools.system.dbType')">
             <el-select
               v-model="config.system['db-type']"
               style="width:100%"
@@ -33,7 +33,7 @@
               <el-option value="pgsql" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Oss类型">
+          <el-form-item :label="t('view.systemTools.system.ossType')">
             <el-select
               v-model="config.system['oss-type']"
               style="width:100%"
@@ -45,16 +45,16 @@
               <el-option value="huawei-obs" />
             </el-select>
           </el-form-item>
-          <el-form-item label="多点登录拦截">
-            <el-checkbox v-model="config.system['use-multipoint']">开启</el-checkbox>
+          <el-form-item :label="t('view.systemTools.system.blockMultiSignOn')">
+            <el-checkbox v-model="config.system['use-multipoint']">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
-          <el-form-item label="开启redis">
-            <el-checkbox v-model="config.system['use-redis']">开启</el-checkbox>
+          <el-form-item :label="t('view.systemTools.system.enableRedis')">
+            <el-checkbox v-model="config.system['use-redis']">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
-          <el-form-item label="限流次数">
+          <el-form-item :label="t('view.systemTools.system.ipLimitCount')">
             <el-input-number v-model.number="config.system['iplimit-count']" />
           </el-form-item>
-          <el-form-item label="限流时间">
+          <el-form-item :label="t('view.systemTools.system.ipLimitTime')">
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
           <el-tooltip
@@ -67,42 +67,42 @@
           </el-tooltip>
         </el-collapse-item>
         <el-collapse-item
-          title="jwt签名"
+          :title="t('view.systemTools.system.jwtSignature')"
           name="2"
         >
-          <el-form-item label="jwt签名">
+          <el-form-item :label="t('view.systemTools.system.jwtSignature')">
             <el-input v-model="config.jwt['signing-key']" />
           </el-form-item>
-          <el-form-item label="有效期">
+          <el-form-item :label="t('view.systemTools.system.expirartionSec')">
             <el-input v-model="config.jwt['expires-time']" />
           </el-form-item>
-          <el-form-item label="缓冲期">
+          <el-form-item :label="t('view.systemTools.system.bufferPeriodSec')">
             <el-input v-model="config.jwt['buffer-time']" />
           </el-form-item>
-          <el-form-item label="签发者">
+          <el-form-item :label="t('view.systemTools.system.issuer')">
             <el-input v-model="config.jwt.issuer" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="Zap日志配置"
+          :title="t('view.systemTools.system.zapLogConfig')"
           name="3"
         >
-          <el-form-item label="级别">
+          <el-form-item :label="t('view.systemTools.system.level')">
             <el-input v-model.number="config.zap.level" />
           </el-form-item>
-          <el-form-item label="输出">
+          <el-form-item :label="t('view.systemTools.system.output')">
             <el-input v-model="config.zap.format" />
           </el-form-item>
-          <el-form-item label="日志前缀">
+          <el-form-item :label="t('view.systemTools.system.logPrefix')">
             <el-input v-model="config.zap.prefix" />
           </el-form-item>
-          <el-form-item label="日志文件夹">
+          <el-form-item :label="t('view.systemTools.system.logFolder')">
             <el-input v-model="config.zap.director" />
           </el-form-item>
-          <el-form-item label="编码级">
+          <el-form-item :label="t('view.systemTools.system.encodeLevel')">
             <el-input v-model="config.zap['encode-level']" />
           </el-form-item>
-          <el-form-item label="栈名">
+          <el-form-item :label="t('view.systemTools.system.stackName')">
             <el-input v-model="config.zap['stacktrace-key']" />
           </el-form-item>
           <el-form-item label="日志留存时间(默认以天为单位)">
@@ -111,12 +111,12 @@
           <el-form-item label="显示行">
             <el-checkbox v-model="config.zap['show-line']" />
           </el-form-item>
-          <el-form-item label="输出控制台">
+          <el-form-item :label="t('view.systemTools.system.outputConsole')">
             <el-checkbox v-model="config.zap['log-in-console']" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="Redis admin数据库配置"
+          :title="t('view.systemTools.system.redisAdminDBConfig')"
           name="4"
         >
           <el-form-item label="库">
@@ -185,39 +185,39 @@
           title="邮箱配置"
           name="5"
         >
-          <el-form-item label="接收者邮箱">
+          <el-form-item :label="t('view.systemTools.system.recipientEmail')">
             <el-input
               v-model="config.email.to"
-              placeholder="可多个，以逗号分隔"
+              :placeholder="t('view.systemTools.system.emailNote')"
             />
           </el-form-item>
-          <el-form-item label="端口">
+          <el-form-item :label="t('view.systemTools.system.port')">
             <el-input v-model.number="config.email.port" />
           </el-form-item>
-          <el-form-item label="发送者邮箱">
+          <el-form-item :label="t('view.systemTools.system.emailSender')">
             <el-input v-model="config.email.from" />
           </el-form-item>
-          <el-form-item label="host">
+          <el-form-item label="Host">
             <el-input v-model="config.email.host" />
           </el-form-item>
-          <el-form-item label="是否为ssl">
+          <el-form-item :label="t('view.systemTools.system.enableSSL')">
             <el-checkbox v-model="config.email['is-ssl']" />
           </el-form-item>
-          <el-form-item label="secret">
+          <el-form-item label="Secret">
             <el-input v-model="config.email.secret" />
           </el-form-item>
-          <el-form-item label="测试邮件">
-            <el-button @click="email">测试邮件</el-button>
+          <el-form-item :label="t('view.systemTools.system.testEmail')">
+            <el-button @click="email">{{ t('view.systemTools.system.testEmail') }}</el-button>
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="验证码配置"
+          :title="t('view.systemTools.system.verCodeConfig')"
           name="7"
         >
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
-          <el-form-item label="图片宽度">
+          <el-form-item label="平台宽度">
             <el-input v-model.number="config.captcha['img-width']" />
           </el-form-item>
           <el-form-item label="图片高度">
@@ -225,7 +225,7 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="数据库配置"
+          :title="t('view.systemTools.system.dbConfig')"
           name="9"
         >
           <template v-if="config.system['db-type'] === 'mysql'">
@@ -301,12 +301,12 @@
         </el-collapse-item>
 
         <el-collapse-item
-          title="oss配置"
+          :title="t('view.systemTools.system.ossConfig')"
           name="10"
         >
           <template v-if="config.system['oss-type'] === 'local'">
-            <h2>本地文件配置</h2>
-            <el-form-item label="本地文件访问路径">
+            <h2>{{ t('view.systemTools.system.localFileConfig') }}</h2>
+            <el-form-item :label="t('view.systemTools.system.localFilePath')">
               <el-input v-model="config.local.path" />
             </el-form-item>
             <el-form-item label="本地文件存储路径">
@@ -325,7 +325,7 @@
               <el-input v-model="config.qiniu['img-path']" />
             </el-form-item>
             <el-form-item label="是否使用https">
-              <el-checkbox v-model="config.qiniu['use-https']">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu['use-https']">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
             <el-form-item label="accessKey">
               <el-input v-model="config.qiniu['access-key']" />
@@ -334,7 +334,7 @@
               <el-input v-model="config.qiniu['secret-key']" />
             </el-form-item>
             <el-form-item label="上传是否使用CDN上传加速">
-              <el-checkbox v-model="config.qiniu['use-cdn-domains']">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu['use-cdn-domains']">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
           </template>
           <template v-if="config.system['oss-type'] === 'tencent-cos'">
@@ -398,70 +398,70 @@
         </el-collapse-item>
 
         <el-collapse-item
-          title="Excel上传配置"
+          :title="t('view.systemTools.system.excelUploadConfig')"
           name="11"
         >
-          <el-form-item label="合成目标地址">
+          <el-form-item :label="t('view.systemTools.system.excelDir')">
             <el-input v-model="config.excel.dir" />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item
-          title="自动化代码配置"
+          :title="t('view.systemTools.system.autoCodeConfig')"
           name="12"
         >
-          <el-form-item label="是否自动重启(linux)">
+          <el-form-item :label="t('view.systemTools.system.autoRestart')">
             <el-checkbox v-model="config.autocode['transfer-restart']" />
           </el-form-item>
-          <el-form-item label="root(项目根路径)">
+          <el-form-item :label="t('view.systemTools.system.projectRootPath')">
             <el-input
               v-model="config.autocode.root"
               disabled
             />
           </el-form-item>
-          <el-form-item label="Server(后端代码地址)">
+          <el-form-item :label="t('view.systemTools.system.backendCodePath')">
             <el-input v-model="config.autocode['transfer-restart']" />
           </el-form-item>
-          <el-form-item label="SApi(后端api文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendApiPath')">
             <el-input v-model="config.autocode['server-api']" />
           </el-form-item>
-          <el-form-item label="SInitialize(后端Initialize文件夹)">
+          <el-form-item :label="t('view.systemTools.system.backendInitPath')">
             <el-input v-model="config.autocode['server-initialize']" />
           </el-form-item>
-          <el-form-item label="SModel(后端Model文件地址)">
+          <el-form-item :label="t('view.systemTools.system.backendModelPath')">
             <el-input v-model="config.autocode['server-model']" />
           </el-form-item>
-          <el-form-item label="SRequest(后端Request文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendRequestPath')">
             <el-input v-model="config.autocode['server-request']" />
           </el-form-item>
-          <el-form-item label="SRouter(后端Router文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendRouterPath')">
             <el-input v-model="config.autocode['server-router']" />
           </el-form-item>
-          <el-form-item label="SService(后端Service文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendServicePath')">
             <el-input v-model="config.autocode['server-service']" />
           </el-form-item>
-          <el-form-item label="Web(前端文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendCodePath')">
             <el-input v-model="config.autocode.web" />
           </el-form-item>
-          <el-form-item label="WApi(后端WApi文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendApiPath')">
             <el-input v-model="config.autocode['web-api']" />
           </el-form-item>
-          <el-form-item label="WForm(后端WForm文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendFormPath')">
             <el-input v-model="config.autocode['web-form']" />
           </el-form-item>
-          <el-form-item label="WTable(后端WTable文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendTablePath')">
             <el-input v-model="config.autocode['web-table']" />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item
-          title="Timer(定时任务)"
+          :title="t('view.systemTools.system.timedTask')"
           name="13"
         >
-          <el-form-item label="Start（是否启用）">
+          <el-form-item :label="t('view.systemTools.system.startEnableDisable')">
             <el-checkbox v-model="config.timer['start']" />
           </el-form-item>
-          <el-form-item label="Spec(CRON表达式)">
+          <el-form-item :label="t('view.systemTools.system.cronExp')">
             <el-input v-model="config.timer.spec" />
           </el-form-item>
           <template v-for="(item,k) in config.timer.detail">
@@ -484,11 +484,11 @@
       <el-button
         type="primary"
         @click="update"
-      >立即更新</el-button>
+      >{{ t('view.systemTools.system.updateNow') }}</el-button>
       <el-button
         type="primary"
         @click="reload"
-      >重启服务（开发中）</el-button>
+      >{{ t('view.systemTools.system.restartService') }}</el-button>
     </div>
   </div>
 </template>
@@ -498,6 +498,9 @@ import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Config'
@@ -559,7 +562,7 @@ const update = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '配置文件设置成功'
+      message: t('view.systemTools.system.configSetupSuccess')
     })
     await initForm()
   }
@@ -569,13 +572,13 @@ const email = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '邮件发送成功'
+      message: t('view.systemTools.system.emailSentSuccess')
     })
     await initForm()
   } else {
     ElMessage({
       type: 'error',
-      message: '邮件发送失败'
+      message: t('view.systemTools.system.emailSentError')
     })
   }
 }

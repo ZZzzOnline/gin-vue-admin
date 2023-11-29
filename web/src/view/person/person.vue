@@ -200,12 +200,12 @@
           <el-button
 
             @click="showPassword = false"
-          >取 消</el-button>
+          >{{ t('general.close') }}</el-button>
           <el-button
 
             type="primary"
             @click="savePassword"
-          >确 定</el-button>
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -251,7 +251,7 @@
           <el-button
 
             @click="closeChangePhone"
-          >取消</el-button>
+          >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
 
@@ -302,7 +302,7 @@
           <el-button
 
             @click="closeChangeEmail"
-          >取消</el-button>
+          >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
 
@@ -320,6 +320,9 @@ import { reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 import SelectImage from '@/components/selectImage/selectImage.vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Person',
@@ -390,7 +393,7 @@ watch(() => userStore.userInfo.headerImg, async(val) => {
     userStore.ResetUserInfo({ headerImg: val })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: t('general.setupSuccess'),
     })
   }
 })
@@ -413,7 +416,7 @@ const enterEdit = async() => {
     userStore.ResetUserInfo({ nickName: nickName.value })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: t('general.setupSuccess'),
     })
   }
   nickName.value = ''

@@ -20,6 +20,9 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const props = defineProps({
   previewCode: {
@@ -74,7 +77,7 @@ const selectText = () => {
 const copy = () => {
   selectText()
   document.execCommand('copy')
-  ElMessage.success('复制成功')
+  ElMessage.success(t('general.copySuccess'))
 }
 
 defineExpose({ copy })

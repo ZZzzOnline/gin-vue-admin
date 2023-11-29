@@ -40,10 +40,10 @@
       :style="{ left: left + 'px', top: top + 'px' }"
       class="contextmenu"
     >
-      <li @click="closeAll">关闭所有</li>
-      <li @click="closeLeft">关闭左侧</li>
-      <li @click="closeRight">关闭右侧</li>
-      <li @click="closeOther">关闭其他</li>
+      <li @click="closeAll">{{ t('historyComponent.closeAll') }}</li>
+      <li @click="closeLeft">{{ t('historyComponent.closeLeft') }}</li>
+      <li @click="closeRight">{{ t('historyComponent.closeRight') }}</li>
+      <li @click="closeOther">{{ t('historyComponent.closeOther') }}</li>
     </ul>
   </div>
 </template>
@@ -55,6 +55,10 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 
 defineOptions({
   name: 'HistoryComponent',
@@ -119,7 +123,7 @@ const closeAll = () => {
     {
       name: defaultRouter.value,
       meta: {
-        title: '首页',
+        title: t('menus.home'),
       },
       query: {},
       params: {},
@@ -296,7 +300,7 @@ const initPage = () => {
     {
       name: defaultRouter.value,
       meta: {
-        title: '首页',
+        title: t('menus.home'),
       },
       query: {},
       params: {},
@@ -325,7 +329,7 @@ onUnmounted(() => {
 
 <style lang="scss">
 .contextmenu {
-  width: 100px;
+  width: 120px;
   margin: 0;
   border: 1px solid #ccc;
   background: #fff;

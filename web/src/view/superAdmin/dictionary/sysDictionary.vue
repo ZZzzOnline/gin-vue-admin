@@ -1,7 +1,7 @@
 <template>
   <div>
     <warning-bar
-      title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
+      :title="t('view.dictionary.sysDictionary.dictNote')"
     />
     <div class="dict-box flex gap-4">
       <div class="w-64 bg-white p-4">
@@ -11,7 +11,7 @@
             type="primary"
             @click="openDialog"
           >
-            新增
+            {{ t('general.add') }}
           </el-button>
         </div>
         <el-scrollbar
@@ -38,17 +38,17 @@
                 placement="top"
                 width="160"
               >
-                <p>确定要删除吗？</p>
+                <p>{{ t('general.deleteConfirm') }}</p>
                 <div style="text-align: right; margin-top: 8px;">
                   <el-button
                     type="primary"
                     link
                     @click="dictionary.visible = false"
-                  >取消</el-button>
+                  >{{ t('general.cancel') }}</el-button>
                   <el-button
                     type="primary"
                     @click="deleteSysDictionaryFunc(dictionary)"
-                  >确定</el-button>
+                  >{{ t('general.confirm') }}</el-button>
                 </div>
                 <template #reference>
                   <el-icon
@@ -70,7 +70,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      :title="type==='create'?'添加字典':'修改字典'"
+      :title="type==='create'?t('view.dictionary.sysDictionary.addDictionary'):t('view.dictionary.sysDictionary.editDictionary')"
     >
       <el-form
         ref="dialogForm"
@@ -79,45 +79,45 @@
         label-width="110px"
       >
         <el-form-item
-          label="字典名（中）"
+        :label="t('view.dictionary.sysDictionary.dictName')"
           prop="name"
         >
           <el-input
             v-model="formData.name"
-            placeholder="请输入字典名（中）"
+            :placeholder="t('view.dictionary.sysDictionary.enterDictName')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
         <el-form-item
-          label="字典名（英）"
+        :label="t('view.dictionary.sysDictionary.dictNameEn')"
           prop="type"
         >
           <el-input
             v-model="formData.type"
-            placeholder="请输入字典名（英）"
+            :placeholder="t('view.dictionary.sysDictionary.enterDictNameEn')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
         <el-form-item
-          label="状态"
+        :label="t('view.dictionary.sysDictionary.status')"
           prop="status"
           required
         >
           <el-switch
             v-model="formData.status"
-            active-text="开启"
-            inactive-text="停用"
+            :active-text="t('general.enable')"
+            :inactive-text="t('general.disable')"
           />
         </el-form-item>
         <el-form-item
-          label="描述"
+        :label="t('general.description')"
           prop="desc"
         >
           <el-input
             v-model="formData.desc"
-            placeholder="请输入描述"
+            :placeholder="t('view.dictionary.sysDictionary.enterDescription')"
             clearable
             :style="{ width: '100%' }"
           />
@@ -125,12 +125,12 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
           <el-button
 
             type="primary"
             @click="enterDialog"
-          >确 定</el-button>
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -147,11 +147,14 @@ import {
 } from '@/api/sysDictionary' // 此处请自行替换地址
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
 import sysDictionaryDetail from './sysDictionaryDetail.vue'
 import { Edit, Plus } from '@element-plus/icons-vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 defineOptions({
   name: 'SysDictionary',
 })
@@ -168,21 +171,21 @@ const rules = ref({
   name: [
     {
       required: true,
-      message: '请输入字典名（中）',
+      message: t('view.dictionary.sysDictionary.enterDictName'),
       trigger: 'blur',
     },
   ],
   type: [
     {
       required: true,
-      message: '请输入字典名（英）',
+      message: t('view.dictionary.sysDictionary.enterDictNameEn'),
       trigger: 'blur',
     },
   ],
   desc: [
     {
       required: true,
-      message: '请输入描述',
+      message: t('view.dictionary.sysDictionary.enterDescription'),
       trigger: 'blur',
     },
   ],
@@ -229,7 +232,7 @@ const deleteSysDictionaryFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功',
+      message: t('general.deleteSuccess'),
     })
     getTableData()
   }

@@ -7,7 +7,7 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >新增</el-button>
+        >{{ t('general.add') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -49,7 +49,7 @@
         />
         <el-table-column
           align="left"
-          label="操作"
+          :label="t('general.operations')"
           min-width="160"
         >
           <template #default="scope">
@@ -58,23 +58,23 @@
               link
               icon="edit"
               @click="updateCustomer(scope.row)"
-            >变更</el-button>
+            >{{ t('general.change') }}</el-button>
             <el-popover
               v-model="scope.row.visible"
               placement="top"
               width="160"
             >
-              <p>确定要删除吗？</p>
+              <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button
                   type="primary"
                   link
                   @click="scope.row.visible = false"
-                >取消</el-button>
+                >>{{ t('general.cancel') }}</el-button>
                 <el-button
                   type="primary"
                   @click="deleteCustomer(scope.row)"
-                >确定</el-button>
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button
@@ -82,7 +82,7 @@
                   link
                   icon="delete"
                   @click="scope.row.visible = true"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -125,11 +125,11 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
           <el-button
             type="primary"
             @click="enterDialog"
-          >确 定</el-button>
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -148,6 +148,9 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatDate } from '@/utils/format'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Customer'
@@ -210,7 +213,7 @@ const deleteCustomer = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--
@@ -243,6 +246,5 @@ const openDialog = () => {
 }
 
 </script>
-
 
 <style></style>

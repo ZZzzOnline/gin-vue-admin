@@ -110,7 +110,7 @@
                             <el-dropdown-menu>
                               <el-dropdown-item>
                                 <span class="font-bold">
-                                  当前角色：{{ userStore.userInfo.authority.authorityName }}
+                                  {{ t('layout.currentRole') }}{{ userStore.userInfo.authority.authorityName }}
                                 </span>
                               </el-dropdown-item>
                               <template v-if="userStore.userInfo.authorities">
@@ -120,7 +120,7 @@
                                   @click="changeUserAuth(item.authorityId)"
                                 >
                                   <span>
-                                    切换为：{{ item.authorityName }}
+                                    {{ t('layout.switchTo') }}{{ item.authorityName }}
                                   </span>
                                 </el-dropdown-item>
                               </template>
@@ -141,11 +141,11 @@
                               <el-dropdown-item
                                 icon="avatar"
                                 @click="toPerson"
-                              >个人信息</el-dropdown-item>
+                              >{{ t('layout.personalInfo') }}</el-dropdown-item>
                               <el-dropdown-item
                                 icon="reading-lamp"
                                 @click="userStore.LoginOut"
-                              >登 出</el-dropdown-item>
+                              >{{ t('layout.logout') }}</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
                         </el-dropdown>
@@ -168,7 +168,7 @@
         >
           <div
             v-loading="loadingFlag"
-            element-loading-text="正在加载中"
+            :element-loading-text="t('layout.loading')"
           >
             <transition
               mode="out-in"
@@ -204,6 +204,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
 import { useUserStore } from '@/pinia/modules/user'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'Layout',
