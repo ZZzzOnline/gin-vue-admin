@@ -141,7 +141,7 @@ autocode:
   transfer-restart: true
   # root 自动适配项目根目录
   # 请不要手动配置,他会在项目加载的时候识别出根路径
-  root: "E:\company\jz\projects\blocklords\development\blocklords-admin"
+  root: ""
   server: /server
   server-plug: /plugin/%s
   server-api: /api/v1/%s
