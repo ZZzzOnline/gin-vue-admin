@@ -125,7 +125,7 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: gva
+    db-name: blocklords-admin
     username: root
     password: Zhao17333021636..
     path: 127.0.0.1
