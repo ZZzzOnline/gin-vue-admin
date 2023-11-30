@@ -93,6 +93,20 @@ language:
 local:
     path: uploads/file
     store-path: uploads/file
+mongo:
+    coll: admin_init_collection
+    options: maxPoolSize=20&w=majority&directConnection=true
+    database: dev-blocklords
+    username: ""
+    password: ""
+    min-pool-size: 5
+    max-pool-size: 30
+    socket-timeout-ms: 30000
+    connect-timeout-ms: 30000
+    is-zap: false
+    hosts:
+        - host: 192.168.8.223
+          port: "27027"
 mssql:
     prefix: ""
     port: ""
@@ -185,6 +199,7 @@ system:
     iplimit-time: 3600
     use-multipoint: false
     use-redis: false
+    use-mongo: true
 tencent-cos:
     bucket: xxxxx-10005608
     region: ap-shanghai

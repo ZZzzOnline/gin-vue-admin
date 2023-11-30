@@ -34,6 +34,13 @@ func (adminModuleControlApi *AdminModuleControlApi) CreateAdminModuleControl(c *
 		return
 	}
 	adminModuleControl.CreatedBy = utils.GetUserID(c)
+	verify := utils.Rules{
+		"Email": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(adminModuleControl, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := adminModuleControlService.CreateAdminModuleControl(&adminModuleControl); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
@@ -109,6 +116,13 @@ func (adminModuleControlApi *AdminModuleControlApi) UpdateAdminModuleControl(c *
 		return
 	}
 	adminModuleControl.UpdatedBy = utils.GetUserID(c)
+	verify := utils.Rules{
+		"Email": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(adminModuleControl, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := adminModuleControlService.UpdateAdminModuleControl(adminModuleControl); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
