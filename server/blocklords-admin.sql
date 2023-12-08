@@ -11,36 +11,11 @@
  Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 30/11/2023 19:44:46
+ Date: 08/12/2023 16:24:20
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for admin_module_control
--- ----------------------------
-DROP TABLE IF EXISTS `admin_module_control`;
-CREATE TABLE `admin_module_control`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(3) NULL DEFAULT NULL,
-  `updated_at` datetime(3) NULL DEFAULT NULL,
-  `deleted_at` datetime(3) NULL DEFAULT NULL,
-  `forbidden_login` tinyint(1) NULL DEFAULT NULL COMMENT '玩家是否被禁止登录：禁止登录-true',
-  `forbidden_in_game_hero_export` tinyint(1) NULL DEFAULT NULL COMMENT '是否禁止游戏内英雄导出：禁止-true',
-  `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
-  `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱地址',
-  `account_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '账号唯一标识',
-  `player_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '玩家标识',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_admin_module_control_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of admin_module_control
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for casbin_rule
@@ -57,7 +32,7 @@ CREATE TABLE `casbin_rule`  (
   `v5` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_casbin_rule`(`ptype`, `v0`, `v1`, `v2`, `v3`, `v4`, `v5`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 950 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1474 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of casbin_rule
@@ -477,7 +452,7 @@ CREATE TABLE `jwt_blacklists`  (
   `jwt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'jwt',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of jwt_blacklists
@@ -514,6 +489,7 @@ INSERT INTO `jwt_blacklists` VALUES (29, '2023-11-30 19:37:45.238', '2023-11-30 
 INSERT INTO `jwt_blacklists` VALUES (30, '2023-11-30 19:39:50.645', '2023-11-30 19:39:50.645', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiYTk5ZDNmODEtNzUyMS00ZjQxLWEzOGItMGQ1MDE0MGE0ODBlIiwiSUQiOjEsIlVzZXJuYW1lIjoiYWRtaW4iLCJOaWNrTmFtZSI6ImFkbWluIiwiQXV0aG9yaXR5SWQiOjg4OCwiQnVmZmVyVGltZSI6ODY0MDAsImlzcyI6InFtUGx1cyIsImF1ZCI6WyJHVkEiXSwiZXhwIjoxNzAxOTQ5MDgyLCJuYmYiOjE3MDEzNDQyODJ9.kwOy855BpusKbuHZJ5M4GbwQjQ6wHHxzSpFDqAghbPM');
 INSERT INTO `jwt_blacklists` VALUES (31, '2023-11-30 19:41:12.065', '2023-11-30 19:41:12.065', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiOTRiMDg1ZDMtZTExOC00MmI1LTkyYmEtYWNhOGM2N2JjYmRkIiwiSUQiOjIsIlVzZXJuYW1lIjoibmlja3kiLCJOaWNrTmFtZSI6Im5pY2t5IiwiQXV0aG9yaXR5SWQiOjg5MCwiQnVmZmVyVGltZSI6ODY0MDAsImlzcyI6InFtUGx1cyIsImF1ZCI6WyJHVkEiXSwiZXhwIjoxNzAxOTQ5MjAwLCJuYmYiOjE3MDEzNDQ0MDB9.7FM7THrtkw360mrqbpIkthy33tyoHUPclu48-az6RuI');
 INSERT INTO `jwt_blacklists` VALUES (32, '2023-11-30 19:43:04.855', '2023-11-30 19:43:04.855', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiYTk5ZDNmODEtNzUyMS00ZjQxLWEzOGItMGQ1MDE0MGE0ODBlIiwiSUQiOjEsIlVzZXJuYW1lIjoiYWRtaW4iLCJOaWNrTmFtZSI6ImFkbWluIiwiQXV0aG9yaXR5SWQiOjg4OCwiQnVmZmVyVGltZSI6ODY0MDAsImlzcyI6InFtUGx1cyIsImF1ZCI6WyJHVkEiXSwiZXhwIjoxNzAxOTQ5Mjc4LCJuYmYiOjE3MDEzNDQ0Nzh9.h4wV-1v24dLS2PZiS2zXu8_wjHnnwVgCpWiwKGdmjF4');
+INSERT INTO `jwt_blacklists` VALUES (33, '2023-12-08 15:47:34.083', '2023-12-08 15:47:34.083', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiNGEwNGMxY2YtMjczMi00ZmU0LWE0NjAtYzFiYzVjMjU0NTBhIiwiSUQiOjExLCJVc2VybmFtZSI6Im1pY2hhZWwiLCJOaWNrTmFtZSI6Im1pY2hhZWwiLCJBdXRob3JpdHlJZCI6OTk5LCJCdWZmZXJUaW1lIjo4NjQwMCwiaXNzIjoicW1QbHVzIiwiYXVkIjpbIkdWQSJdLCJleHAiOjE3MDI1NDg1MjcsIm5iZiI6MTcwMTM0NTM0OX0.ddKbnhI53sGHtv9ox-aT6iscm2SnoyQ8bEl-O0T4eus');
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -649,7 +625,7 @@ CREATE TABLE `sys_authorities`  (
   `default_router` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'dashboard' COMMENT '默认菜单',
   PRIMARY KEY (`authority_id`) USING BTREE,
   UNIQUE INDEX `authority_id`(`authority_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9529 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9530 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_authorities
@@ -984,7 +960,7 @@ CREATE TABLE `sys_dictionaries`  (
   `desc` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dictionaries
@@ -1066,7 +1042,7 @@ CREATE TABLE `sys_operation_records`  (
   `user_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_operation_records_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 116 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_operation_records
@@ -1236,7 +1212,7 @@ CREATE TABLE `sys_users`  (
   INDEX `idx_sys_users_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_users_uuid`(`uuid`) USING BTREE,
   INDEX `idx_sys_users_username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_users
