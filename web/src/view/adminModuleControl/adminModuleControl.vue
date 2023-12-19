@@ -15,7 +15,8 @@
         >
           <template #label>
             <span>
-              创建日期
+              <!-- 创建日期 -->
+              {{ t('view.gameModuleControl.singleUserControl.createTime') }}
               <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
                 <el-icon>
                   <QuestionFilled />
@@ -400,6 +401,9 @@ import {
 import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'AdminModuleControl'

@@ -456,6 +456,11 @@
 				"emailSentSuccess" : "邮件发送成功",
 				"emailSentError" : "邮件发送失败"
 			}
+		},
+		"gameModuleControl": {
+			"singleUserControl": {
+				"createTime":"创建日期"
+			}
 		}
 	}
 }
