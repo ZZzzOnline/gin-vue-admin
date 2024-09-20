@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: my-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql-secret
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    networks:
+      - mysql-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      
+networks:
+  mysql-network:
+    driver: bridge
